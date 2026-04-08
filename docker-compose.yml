@@ -1,0 +1,46 @@
+services:
+  frontend:
+    build: ./htmlstarter
+    container_name: htmlstarter
+    expose:
+      - "3000"
+    restart: unless-stopped
+    networks:
+      - web
+
+  backend:
+    build: ./express_helloworld
+    container_name: express_helloworld
+    expose:
+      - "8001"
+    restart: unless-stopped
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - web
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  web:
