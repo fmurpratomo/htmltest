@@ -17,6 +17,28 @@ services:
     networks:
       - web
 
+  frontend-prod:
+    build: ./htmlstarter
+    container_name: htmlstarter-prod
+    expose:
+      - "3000"
+    restart: unless-stopped
+    profiles:
+      - prod
+    networks:
+      - web
+
+  backend-prod:
+    build: ./express_helloworld
+    container_name: express_helloworld-prod
+    expose:
+      - "8001"
+    restart: unless-stopped
+    profiles:
+      - prod
+    networks:
+      - web
+
   caddy:
     image: caddy:2-alpine
     container_name: caddy
@@ -35,8 +57,8 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - frontend
-      - backend
+      - frontend-prod
+      - backend-prod
     networks:
       - web
 
