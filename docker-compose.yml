@@ -5,6 +5,8 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+    profiles:
+      - dev
     networks:
       - web
 
@@ -14,6 +16,8 @@ services:
     ports:
       - "8001:8001"
     restart: unless-stopped
+    profiles:
+      - dev
     networks:
       - web
 
