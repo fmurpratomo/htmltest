@@ -3,6 +3,9 @@
 
 	tls {$ACME_EMAIL}
 
+	# Redirect bare /api to /api/ so handle_path below matches
+	redir /api /api/ permanent
+
 	# Backend: strip the /api prefix before proxying to Express
 	handle_path /api/* {
 		reverse_proxy backend:8001

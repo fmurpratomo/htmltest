@@ -2,6 +2,8 @@ services:
   frontend:
     build: ./htmlstarter
     container_name: htmlstarter
+    ports:
+      - "127.0.0.1:3000:3000"
     expose:
       - "3000"
     restart: unless-stopped
@@ -11,6 +13,8 @@ services:
   backend:
     build: ./express_helloworld
     container_name: express_helloworld
+    ports:
+      - "127.0.0.1:8001:8001"
     expose:
       - "8001"
     restart: unless-stopped
@@ -21,6 +25,8 @@ services:
     image: caddy:2-alpine
     container_name: caddy
     restart: unless-stopped
+    profiles:
+      - prod
     ports:
       - "80:80"
       - "443:443"
