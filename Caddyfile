@@ -1,18 +1,15 @@
-{$DOMAIN} {
+{$FRONTEND_DOMAIN} {
 	encode zstd gzip
 
 	tls {$ACME_EMAIL}
 
-	# Redirect bare /api to /api/ so handle_path below matches
-	redir /api /api/ permanent
+	reverse_proxy frontend-prod:3000
+}
 
-	# Backend: strip the /api prefix before proxying to Express
-	handle_path /api/* {
-		reverse_proxy backend-prod:8001
-	}
+{$BACKEND_DOMAIN} {
+	encode zstd gzip
 
-	# Frontend: everything else goes to Next.js
-	handle {
-		reverse_proxy frontend-prod:3000
-	}
+	tls {$ACME_EMAIL}
+
+	reverse_proxy backend-prod:8001
 }
